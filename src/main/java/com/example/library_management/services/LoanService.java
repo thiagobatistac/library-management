@@ -28,7 +28,7 @@ public class LoanService {
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new RuntimeException("Book not found"));
 
         Loan loan = new Loan();
-       loan.setUser(user);
+        loan.setUser(user);
         loan.setBook(book);
         loan.setLoanDate(LocalDate.now());
         loan.setReturnDate(null);
