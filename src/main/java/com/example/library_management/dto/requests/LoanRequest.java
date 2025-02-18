@@ -1,6 +1,7 @@
-package com.example.library_management.dto;
+package com.example.library_management.dto.requests;
 
 public class LoanRequest {
+
     private Long userId;
     private Long bookId;
 

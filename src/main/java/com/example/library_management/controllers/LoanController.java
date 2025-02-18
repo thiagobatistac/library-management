@@ -1,6 +1,6 @@
 package com.example.library_management.controllers;
 
-import com.example.library_management.dto.LoanRequest;
+import com.example.library_management.dto.requests.LoanRequest;
 import com.example.library_management.entities.Loan;
 import com.example.library_management.services.LoanService;
 import org.springframework.beans.factory.annotation.Autowired;
