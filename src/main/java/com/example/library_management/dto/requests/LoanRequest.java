@@ -1,8 +1,12 @@
 package com.example.library_management.dto.requests;
 
+import jakarta.validation.constraints.NotNull;
+
 public class LoanRequest {
 
+    @NotNull(message = "User ID is required")
     private Long userId;
+    @NotNull(message = "Book ID is required")
     private Long bookId;
 
     public Long getUserId() {

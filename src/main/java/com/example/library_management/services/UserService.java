@@ -1,11 +1,14 @@
 package com.example.library_management.services;
 
+import com.example.library_management.dto.requests.UserRequest;
+import com.example.library_management.dto.responses.UserResponse;
 import com.example.library_management.entities.User;
 import com.example.library_management.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -13,37 +16,46 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User createUser(String name, String email) {
+    public UserResponse createUser(UserRequest request) {
         User newUser = new User();
-        newUser.setName(name);
-        newUser.setEmail(email);
+        newUser.setName(request.getName());
+        newUser.setEmail(request.getEmail());
 
-        return userRepository.save(newUser);
+        User savedUser = userRepository.save(newUser);
+        return convertToUserResponse(savedUser);
     }
 
-    public User findUser(Long id) {
-        return userRepository.findById(id)
+    public UserResponse findUserById(Long id) {
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found."));
+        return convertToUserResponse(user);
     }
 
-    public User updateUser(Long id, String name, String email) {
-        User userToUpdtade = userRepository.findById(id)
+    public UserResponse updateUser(Long id, String name, String email) {
+        User userToUpdate = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found."));
 
-        userToUpdtade.setName(name);
-        userToUpdtade.setEmail(email);
+        userToUpdate.setName(name);
+        userToUpdate.setEmail(email);
 
-        return userRepository.save(userToUpdtade);
+        User updatedUser = userRepository.save(userToUpdate);
+        return convertToUserResponse(updatedUser);
     }
 
-    public User deleteUser(Long id) {
+    public void deleteUser(Long id) {
         User userToDelete = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found."));
         userRepository.delete(userToDelete);
-        return userToDelete;
     }
 
-    public List<User> findAllUsers() {
-        return userRepository.findAll();
+    public List<UserResponse> findAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(this::convertToUserResponse)
+                .collect(Collectors.toList());
+    }
+
+    private UserResponse convertToUserResponse(User user) {
+        return new UserResponse(user.getId(), user.getName(), user.getEmail());
     }
 }

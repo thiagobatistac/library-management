@@ -1,5 +1,6 @@
 package com.example.library_management.services;
 
+import com.example.library_management.dto.responses.LoanResponse;
 import com.example.library_management.entities.Book;
 import com.example.library_management.entities.Loan;
 import com.example.library_management.entities.User;
@@ -23,9 +24,11 @@ public class LoanService {
     @Autowired
     private UserRepository userRepository;
 
-    public Loan borrowBook(Long userId, Long bookId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-        Book book = bookRepository.findById(bookId).orElseThrow(() -> new RuntimeException("Book not found"));
+    public LoanResponse borrowBook(Long userId, Long bookId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new RuntimeException("Book not found"));
 
         Loan loan = new Loan();
         loan.setUser(user);
@@ -33,15 +36,27 @@ public class LoanService {
         loan.setLoanDate(LocalDate.now());
         loan.setReturnDate(null);
 
-        return loanRepository.save(loan);
+        Loan savedLoan = loanRepository.save(loan);
+        return convertToLoanResponse(savedLoan);
     }
 
-    public Loan returnBook(Long userId, Long bookId) {
+    public LoanResponse returnBook(Long userId, Long bookId) {
         Loan loan = loanRepository.findByUserIdAndBookIdAndReturnDateIsNull(userId, bookId)
                 .orElseThrow(() -> new RuntimeException("Loan not found"));
 
         loan.setReturnDate(LocalDate.now());
-        return loanRepository.save(loan);
+        Loan updatedLoan = loanRepository.save(loan);
+        return convertToLoanResponse(updatedLoan);
+    }
+
+    private LoanResponse convertToLoanResponse(Loan loan) {
+        return new LoanResponse(
+                loan.getId(),
+                loan.getUser().getName(),
+                loan.getUser().getEmail(),
+                loan.getBook().getTitle(),
+                loan.getBook().getReleaseYear()
+        );
     }
 }
 

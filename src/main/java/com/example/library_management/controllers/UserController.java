@@ -1,7 +1,9 @@
 package com.example.library_management.controllers;
 
-import com.example.library_management.entities.User;
+import com.example.library_management.dto.requests.UserRequest;
+import com.example.library_management.dto.responses.UserResponse;
 import com.example.library_management.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,24 +18,27 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User newUser = userService.createUser(user.getName(), user.getEmail());
-        return ResponseEntity.ok(newUser);
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest request) {
+        UserResponse newUser = userService.createUser(request);
+        return ResponseEntity.status(201).body(newUser);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> findUser(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.findUser(id));
+    public ResponseEntity<UserResponse> findUser(@PathVariable Long id) {
+        UserResponse user = userService.findUser(id);
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        return ResponseEntity.ok(userService.findAllUsers());
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
+        List<UserResponse> users = userService.findAllUsers();
+        return ResponseEntity.ok(users);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
-        return ResponseEntity.ok(userService.updateUser(id, user.getName(), user.getEmail()));
+    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @RequestBody UserRequest request) {
+        UserResponse updatedUser = userService.updateUser(id, request.getName(), request.getEmail());
+        return ResponseEntity.ok(updatedUser);
     }
 
     @DeleteMapping("/{id}")
@@ -42,3 +47,4 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 }
+

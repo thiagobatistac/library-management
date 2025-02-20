@@ -1,14 +1,12 @@
 package com.example.library_management.controllers;
 
 import com.example.library_management.dto.requests.LoanRequest;
-import com.example.library_management.entities.Loan;
+import com.example.library_management.dto.responses.LoanResponse;
 import com.example.library_management.services.LoanService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/loans")
@@ -18,14 +16,14 @@ public class LoanController {
     private LoanService loanService;
 
     @PostMapping("/borrow")
-    public ResponseEntity<Loan> borrowBook(@RequestBody LoanRequest loanRequest) {
-        Loan loan = loanService.borrowBook(loanRequest.getUserId(), loanRequest.getBookId());
+    public ResponseEntity<LoanResponse> borrowBook(@Valid @RequestBody LoanRequest loanRequest) {
+        LoanResponse loan = loanService.borrowBook(loanRequest.getUserId(), loanRequest.getBookId());
         return ResponseEntity.ok(loan);
     }
 
     @PostMapping("/return")
-    public ResponseEntity<Loan> returnBook(@RequestBody LoanRequest loanRequest) {
-        Loan loan = loanService.returnBook(loanRequest.getUserId(), loanRequest.getBookId());
+    public ResponseEntity<LoanResponse> returnBook(@Valid @RequestBody LoanRequest loanRequest) {
+        LoanResponse loan = loanService.returnBook(loanRequest.getUserId(), loanRequest.getBookId());
         return ResponseEntity.ok(loan);
     }
 }
