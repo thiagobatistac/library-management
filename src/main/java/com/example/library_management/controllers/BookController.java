@@ -4,7 +4,6 @@ import com.example.library_management.dto.requests.BookRequest;
 import com.example.library_management.dto.responses.BookResponse;
 import com.example.library_management.services.BookService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,8 +13,11 @@ import java.util.List;
 @RequestMapping("/books")
 public class BookController {
 
-    @Autowired
-    private BookService bookService;
+    private final BookService bookService;
+
+    public BookController(BookService bookService) {
+        this.bookService = bookService;
+    }
 
     @PostMapping
     public ResponseEntity<BookResponse> createBook(@Valid @RequestBody BookRequest request) {
@@ -36,9 +38,10 @@ public class BookController {
     }
 
     @DeleteMapping("/{title}")
-    public ResponseEntity<Void> deleteBook(@PathVariable String title) {
+    public ResponseEntity<String> deleteBook(@PathVariable String title) {
         bookService.deleteBook(title);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("Book deleted successfully");
     }
 }
+
 

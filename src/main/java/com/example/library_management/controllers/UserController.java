@@ -4,7 +4,6 @@ import com.example.library_management.dto.requests.UserRequest;
 import com.example.library_management.dto.responses.UserResponse;
 import com.example.library_management.services.UserService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,8 +13,11 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public UserController(UserService userService){
+        this.userService = userService;
+    }
 
     @PostMapping
     public ResponseEntity<UserResponse> createUser(@Valid @RequestBody UserRequest request) {
@@ -25,7 +27,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> findUser(@PathVariable Long id) {
-        UserResponse user = userService.findUser(id);
+        UserResponse user = userService.findUserById(id);
         return ResponseEntity.ok(user);
     }
 

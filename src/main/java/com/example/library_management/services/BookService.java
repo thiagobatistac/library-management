@@ -3,8 +3,8 @@ package com.example.library_management.services;
 import com.example.library_management.dto.requests.BookRequest;
 import com.example.library_management.dto.responses.BookResponse;
 import com.example.library_management.entities.Book;
+import com.example.library_management.exceptions.BookNotFoundException;
 import com.example.library_management.repositories.BookRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +13,11 @@ import java.util.stream.Collectors;
 @Service
 public class BookService {
 
-    @Autowired
-    private BookRepository bookRepository;
+    private final BookRepository bookRepository;
+
+    public BookService(BookRepository bookRepository){
+        this.bookRepository = bookRepository;
+    }
 
     public BookResponse createBook(BookRequest request) {
         Book newBook = new Book();
@@ -29,7 +32,7 @@ public class BookService {
 
     public BookResponse findBookByTitle(String title) {
         Book book = bookRepository.findByTitle(title)
-                .orElseThrow(() -> new RuntimeException("Book not found with title: " + title));
+                .orElseThrow(() -> new BookNotFoundException("Book not found with title: " + title));
         return convertToBookResponse(book);
     }
 

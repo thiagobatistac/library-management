@@ -3,8 +3,8 @@ package com.example.library_management.services;
 import com.example.library_management.dto.requests.UserRequest;
 import com.example.library_management.dto.responses.UserResponse;
 import com.example.library_management.entities.User;
+import com.example.library_management.exceptions.UserNotFoundException;
 import com.example.library_management.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +13,11 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository){
+        this.userRepository = userRepository;
+    }
 
     public UserResponse createUser(UserRequest request) {
         User newUser = new User();
@@ -27,13 +30,13 @@ public class UserService {
 
     public UserResponse findUserById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found."));
+                .orElseThrow(() -> new UserNotFoundException("User not found."));
         return convertToUserResponse(user);
     }
 
     public UserResponse updateUser(Long id, String name, String email) {
         User userToUpdate = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found."));
+                .orElseThrow(() -> new UserNotFoundException("User not found."));
 
         userToUpdate.setName(name);
         userToUpdate.setEmail(email);
@@ -44,7 +47,7 @@ public class UserService {
 
     public void deleteUser(Long id) {
         User userToDelete = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found."));
+                .orElseThrow(() -> new UserNotFoundException("User not found."));
         userRepository.delete(userToDelete);
     }
 
