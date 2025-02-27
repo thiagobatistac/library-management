@@ -2,6 +2,8 @@ package com.example.library_management.controllers;
 
 import com.example.library_management.dto.requests.BookRequest;
 import com.example.library_management.dto.responses.BookResponse;
+import com.example.library_management.entities.Book;
+import com.example.library_management.exceptions.BookNotFoundException;
 import com.example.library_management.services.BookService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -38,10 +40,18 @@ public class BookController {
     }
 
     @DeleteMapping("/{title}")
-    public ResponseEntity<String> deleteBook(@PathVariable String title) {
-        bookService.deleteBook(title);
-        return ResponseEntity.ok("Book deleted successfully");
+    public ResponseEntity<String> deleteBookByTitle(@PathVariable String title) {
+        bookService.deleteBookByTitle(title);
+        return ResponseEntity.ok("Book deleted successfully.");
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteBookById(@PathVariable Long id) {
+        bookService.deleteBookById(id);
+        return ResponseEntity.ok("Book deleted successfully.");
     }
 }
+
+
 
 

@@ -7,6 +7,8 @@
     import org.springframework.http.ResponseEntity;
     import org.springframework.web.bind.annotation.*;
 
+    import java.util.List;
+
     @RestController
     @RequestMapping("/loans")
     public class LoanController {
@@ -28,4 +30,11 @@
             LoanResponse loan = loanService.returnBook(loanRequest.getUserId(), loanRequest.getBookId());
             return ResponseEntity.ok(loan);
         }
+
+        @GetMapping
+        public ResponseEntity<List<LoanResponse>> getAllLoanedBooks() {
+            List<LoanResponse> loanedBooks = loanService.borrowedBooksList();
+            return ResponseEntity.ok(loanedBooks);
+        }
+
     }

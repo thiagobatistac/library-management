@@ -1,6 +1,8 @@
 package com.example.library_management.dto.responses;
 
 
+import java.util.List;
+
 public class LoanResponse {
 
     private Long id;

@@ -27,3 +27,14 @@ INSERT INTO tb_book (title, genre, release_year, description) VALUES ('Harry Pot
 INSERT INTO tb_book (title, genre, release_year, description) VALUES ('The Name of the Wind', 'Fantasy', 2007, 'The captivating story of Kvothe, a gifted young man with a mysterious past, as he recounts his rise from a child performer to a legendary figure with unmatched magical abilities.');
 INSERT INTO tb_book (title, genre, release_year, description) VALUES ('A Game of Thrones', 'Fantasy', 1996, 'The first book in the A Song of Ice and Fire series, set in a brutal medieval world where noble families vie for power in a kingdom filled with intrigue, war, and supernatural forces.');
 INSERT INTO tb_book (title, genre, release_year, description) VALUES ('The Fellowship of the Ring', 'Fantasy', 1954, 'The first installment of The Lord of the Rings, chronicling the journey of Frodo Baggins as he sets out to destroy the One Ring and defeat the Dark Lord Sauron.');
+
+INSERT INTO tb_user (name, email) VALUES ('John Doe', 'john.doe@example.com');
+INSERT INTO tb_user (name, email) VALUES ('Jane Smith', 'jane.smith@example.com');
+INSERT INTO tb_user (name, email) VALUES ('Alice Johnson', 'alice.johnson@example.com');
+INSERT INTO tb_user (name, email) VALUES ('Bob Brown', 'bob.brown@example.com');
+INSERT INTO tb_user (name, email) VALUES ('Charlie Davis', 'charlie.davis@example.com');
+INSERT INTO tb_user (name, email) VALUES ('Diana Miller', 'diana.miller@example.com');
+INSERT INTO tb_user (name, email) VALUES ('Edward Wilson', 'edward.wilson@example.com');
+INSERT INTO tb_user (name, email) VALUES ('Fiona Clark', 'fiona.clark@example.com');
+INSERT INTO tb_user (name, email) VALUES ('George Hall', 'george.hall@example.com');
+INSERT INTO tb_user (name, email) VALUES ('Helen White', 'helen.white@example.com');

@@ -14,6 +14,8 @@ import com.example.library_management.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LoanService {
@@ -22,7 +24,7 @@ public class LoanService {
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
 
-    public LoanService(LoanRepository loanRepository, BookRepository bookRepository, UserRepository userRepository){
+    public LoanService(LoanRepository loanRepository, BookRepository bookRepository, UserRepository userRepository) {
         this.loanRepository = loanRepository;
         this.bookRepository = bookRepository;
         this.userRepository = userRepository;
@@ -35,7 +37,7 @@ public class LoanService {
                 .orElseThrow(() -> new BookNotFoundException("Book not found"));
 
         if (loanRepository.findByUserIdAndBookIdAndReturnDateIsNull(userId, bookId).isPresent()) {
-            throw new BookNotAvailableException("This book is already loaned.");
+            throw new BookNotAvailableException("This book is already loaned by another user.");
         }
 
         Loan loan = new Loan();
@@ -57,6 +59,18 @@ public class LoanService {
         return convertToLoanResponse(updatedLoan);
     }
 
+    public List<LoanResponse> borrowedBooksList() {
+        List<Loan> loans = loanRepository.findByReturnDateIsNull();
+
+        if (loans.isEmpty()) {
+            throw new LoanNotFoundException("No borrowed books found.");
+        }
+
+        return loans.stream()
+                .map(this::convertToLoanResponse)
+                .collect(Collectors.toList());
+    }
+
     private LoanResponse convertToLoanResponse(Loan loan) {
         return new LoanResponse(
                 loan.getId(),
@@ -67,4 +81,5 @@ public class LoanService {
         );
     }
 }
+
 

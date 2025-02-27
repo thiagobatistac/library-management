@@ -43,10 +43,17 @@ public class BookService {
                 .collect(Collectors.toList());
     }
 
-    public void deleteBook(String title) {
-        Book bookToDelete = bookRepository.findByTitle(title)
-                .orElseThrow(() -> new RuntimeException("Book not found with title: " + title));
-        bookRepository.delete(bookToDelete);
+    public void deleteBookByTitle(String title) {
+        Book bookToDeleteByTitle = bookRepository.findByTitle(title)
+                .orElseThrow(() -> new BookNotFoundException("Book not found with title: " + title));
+        bookRepository.delete(bookToDeleteByTitle);
+    }
+
+    public void deleteBookById(Long id) {
+        if (!bookRepository.existsById(id)) {
+            throw new BookNotFoundException("Book with ID " + id + " not found.");
+        }
+        bookRepository.deleteById(id);
     }
 
     private BookResponse convertToBookResponse(Book book) {
